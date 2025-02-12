@@ -1,8 +1,27 @@
 const express = require('express');
+const cors = require('cors');
+const rateLimit = require('express-rate-limit');
 const db = require('./database');
+
 const app = express();
-app.use(express.json());
 const PORT = 3000;
+
+// Middleware pour parser le JSON
+app.use(express.json());
+
+// 1️⃣ Configuration CORS : Autoriser toutes les origines
+app.use(cors());
+
+// Pour restreindre aux domaines spécifiques, utilisez ceci :
+// app.use(cors({ origin: ['http://localhost:3000', 'http://localhost:4200'] }));
+
+// 2️⃣ Configuration du Rate Limiting : 100 requêtes par 15 min
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // Limite chaque IP à 100 requêtes
+    message: 'Trop de requêtes effectuées depuis cette IP, veuillez réessayer après 15 minutes.'
+});
+app.use(limiter);
 app.get('/', (req, res) => {
 res.json("Registre de personnes! Choisissez le bon routage!")
 })

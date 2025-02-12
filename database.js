@@ -60,4 +60,4 @@ const deletePerson = (id) => {
     });
 };
 
-module.exports = { db, updatePerson, deletePerson };
+module.exports = db;
